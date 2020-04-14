@@ -26,7 +26,7 @@ public class AddUserServlet extends HttpServlet {
             String name = req.getParameter("name");
             String password = req.getParameter("password");
             long age = Long.parseLong(req.getParameter("age"));
-            if (name.trim().length() != 0 && password.trim().length() != 0 && req.getParameter("age").trim().length() !=0 && userService.addUser(new User(name, password, age))) {
+            if (name.trim().length() != 0 && password.trim().length() != 0 && req.getParameter("age").trim().length() != 0 && userService.addUser(new User(name, password, age))) {
                 resp.getWriter().println("You have successfully registered=)");
                 resp.setStatus(HttpStatus.OK_200);
                 req.getRequestDispatcher("index.jsp").forward(req, resp);
@@ -34,7 +34,7 @@ public class AddUserServlet extends HttpServlet {
                 resp.getWriter().println("Failed to register=(");
                 resp.setStatus(HttpStatus.BAD_REQUEST_400);
             }
-        }catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             e.printStackTrace();
         }
     }

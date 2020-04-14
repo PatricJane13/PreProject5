@@ -2,12 +2,13 @@ package service;
 
 import DAO.UserJdbcDAO;
 import model.User;
+
 import java.util.List;
 
 public class UserService {
-    private UserJdbcDAO userJdbcDAO = UserJdbcDAO.getInstance();
+    private UserJdbcDAO userJdbcDAO = new UserJdbcDAO();
 
-    public UserService(){
+    public UserService() {
 
     }
 
@@ -20,7 +21,7 @@ public class UserService {
         return false;
     }
 
-    public List<User> getAllUsers(){
+    public List<User> getAllUsers() {
         return userJdbcDAO.getAllUsers();
     }
 
@@ -28,14 +29,14 @@ public class UserService {
         return userJdbcDAO.getUserById(id);
     }
 
-    public boolean updateUser(String oldName, String oldPassword, Long oldAge, String newName, String newPassword,Long newAge){
-        if (!userJdbcDAO.checkingUser(newName,newPassword)) {
+    public boolean updateUser(String oldName, String oldPassword, Long oldAge, String newName, String newPassword, Long newAge) {
+        if (!userJdbcDAO.checkingUser(newName, newPassword)) {
             return userJdbcDAO.updateUser(oldName, oldPassword, oldAge, newName, newPassword, newAge);
         }
         return false;
     }
 
-    public boolean deleteUser(Long id){
+    public boolean deleteUser(Long id) {
         return userJdbcDAO.deleteUser(id);
     }
 

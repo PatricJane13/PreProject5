@@ -6,10 +6,7 @@
 
 <body>
 <div>
-    <jsp:useBean id="allUsers" class="service.UserService"/>
-    <c:set var="users" value="${allUsers.allUsers}"/>
-
-    <c:forEach items="${users}" var="user">
+    <c:forEach items="${requestScope.users}" var="user">
         <c:out value="${user.name}"/>
         <c:out value="${user.password}"/>
         <c:out value="${user.age}"/><br>

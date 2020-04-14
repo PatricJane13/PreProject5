@@ -8,16 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserJdbcDAO {
-    private static UserJdbcDAO userJdbcDAO;
 
-    public static UserJdbcDAO getInstance(){
-        if(userJdbcDAO == null){
-            userJdbcDAO = new UserJdbcDAO();
-        }
-        return userJdbcDAO;
-    }
-
-    private UserJdbcDAO() {
+    public UserJdbcDAO() {
     }
 
     public User getUserByName(String name) {
@@ -50,10 +42,10 @@ public class UserJdbcDAO {
 
     public void addUser(User user) {
         try (PreparedStatement preparedStatement = DBHelper.getMySqlConnectionJDBC().prepareStatement("INSERT INTO register_table (NAME, password, age) VALUES (?,?,?)")) {
-                preparedStatement.setString(1, user.getName());
-                preparedStatement.setString(2, user.getPassword());
-                preparedStatement.setLong(3, user.getAge());
-                preparedStatement.execute();
+            preparedStatement.setString(1, user.getName());
+            preparedStatement.setString(2, user.getPassword());
+            preparedStatement.setLong(3, user.getAge());
+            preparedStatement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -64,7 +56,7 @@ public class UserJdbcDAO {
             List<User> usersList = new ArrayList<>();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM register_table");
             while (resultSet.next()) {
-                usersList.add(new User(resultSet.getLong("id"),resultSet.getString("name"),resultSet.getString("password"),resultSet.getLong("age")));
+                usersList.add(new User(resultSet.getLong("id"), resultSet.getString("name"), resultSet.getString("password"), resultSet.getLong("age")));
             }
             return usersList;
         } catch (SQLException e) {
@@ -73,7 +65,7 @@ public class UserJdbcDAO {
         return null;
     }
 
-    public boolean updateUser(String oldName, String oldPassword, Long oldAge, String newName, String newPassword,Long newAge) {
+    public boolean updateUser(String oldName, String oldPassword, Long oldAge, String newName, String newPassword, Long newAge) {
         try (PreparedStatement preparedStatement = DBHelper.getMySqlConnectionJDBC().prepareStatement("UPDATE register_table SET NAME = ?, password =?, age=? WHERE NAME =? AND password =? AND age =?")) {
             if (checkingUser(oldName, oldPassword)) {
                 preparedStatement.setString(1, newName);

@@ -23,15 +23,15 @@ public class DeleteUserServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Long id = Long.parseLong(req.getParameter("id"));
         try {
-            if(userService.deleteUser(id)){
+            if (userService.deleteUser(id)) {
                 resp.getWriter().println("The user was successfully deleted=)");
                 resp.setStatus(HttpStatus.OK_200);
                 req.getRequestDispatcher("index.jsp").forward(req, resp);
-            }else {
+            } else {
                 resp.getWriter().println("Error deleting a user=(");
                 resp.setStatus(HttpStatus.BAD_REQUEST_400);
             }
-        }catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             e.printStackTrace();
         }
     }

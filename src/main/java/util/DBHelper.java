@@ -8,18 +8,18 @@ import java.sql.SQLException;
 public class DBHelper {
     private static DBHelper dbHelper;
 
-    public static DBHelper dbHelper(){
-        if(dbHelper == null){
+    public static DBHelper dbHelper() {
+        if (dbHelper == null) {
             dbHelper = new DBHelper();
         }
         return dbHelper;
     }
 
-    private DBHelper(){
+    private DBHelper() {
     }
 
     public static Connection getMySqlConnectionJDBC() {
-        try{
+        try {
             DriverManager.registerDriver((Driver) Class.forName("com.mysql.jdbc.Driver").newInstance());
 
             StringBuilder url = new StringBuilder();
@@ -34,7 +34,7 @@ public class DBHelper {
 
             Connection connection = DriverManager.getConnection(url.toString());
             return connection;
-        }  catch (SQLException | InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+        } catch (SQLException | InstantiationException | IllegalAccessException | ClassNotFoundException e) {
             e.printStackTrace();
             throw new IllegalStateException();
         }
