@@ -65,9 +65,8 @@ public class UserJdbcDAO {
         return null;
     }
 
-    public boolean updateUser(String oldName, String oldPassword, Long oldAge, String newName, String newPassword, Long newAge) {
+    public void updateUser(String oldName, String oldPassword, Long oldAge, String newName, String newPassword, Long newAge) {
         try (PreparedStatement preparedStatement = DBHelper.getMySqlConnectionJDBC().prepareStatement("UPDATE register_table SET NAME = ?, password =?, age=? WHERE NAME =? AND password =? AND age =?")) {
-            if (checkingUser(oldName, oldPassword)) {
                 preparedStatement.setString(1, newName);
                 preparedStatement.setString(2, newPassword);
                 preparedStatement.setLong(3, newAge);
@@ -75,27 +74,22 @@ public class UserJdbcDAO {
                 preparedStatement.setString(5, oldPassword);
                 preparedStatement.setLong(6, oldAge);
                 preparedStatement.execute();
-                return true;
-            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
     }
 
-    public boolean deleteUser(Long id) {
+    public void deleteUser(Long id) {
         try (PreparedStatement preparedStatement = DBHelper.getMySqlConnectionJDBC().prepareStatement("DELETE FROM register_table WHERE NAME =? AND password=?")) {
             User user = getUserById(id);
             if (user != null) {
                 preparedStatement.setString(1, user.getName());
                 preparedStatement.setString(2, user.getPassword());
                 preparedStatement.execute();
-                return true;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
     }
 
     public boolean checkingUser(String name, String password) {
@@ -112,7 +106,7 @@ public class UserJdbcDAO {
         return false;
     }
 
-    public boolean createTable() {
+    public void createTable() {
         try (Statement statement = DBHelper.getMySqlConnectionJDBC().createStatement()) {
             statement.execute("create table if not exists register_table\n" +
                     "(\n" +
@@ -122,11 +116,9 @@ public class UserJdbcDAO {
                     "    age      bigint (3),\n" +
                     "    primary key (id)\n" +
                     ");");
-            return true;
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
     }
 
 }

@@ -12,7 +12,9 @@
         <c:out value="${user.age}"/><br>
         <form method="post">
             <button name="id" value="${user.id}" formaction="/delete">Delete</button>
-            <button name="id" value="${user.id}" formmethod="get" formaction="/update">Update</button>
+        </form>
+        <form method="get">
+            <button name="id" value="${user.id}" formaction="/update">Update</button>
         </form>
     </c:forEach>
 </div>

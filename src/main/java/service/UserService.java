@@ -30,17 +30,23 @@ public class UserService {
     }
 
     public boolean updateUser(String oldName, String oldPassword, Long oldAge, String newName, String newPassword, Long newAge) {
-        if (!userJdbcDAO.checkingUser(newName, newPassword)) {
-            return userJdbcDAO.updateUser(oldName, oldPassword, oldAge, newName, newPassword, newAge);
+        if (!userJdbcDAO.checkingUser(newName, newPassword) && userJdbcDAO.checkingUser(oldName, oldPassword)) {
+             userJdbcDAO.updateUser(oldName, oldPassword, oldAge, newName, newPassword, newAge);
+             return true;
         }
         return false;
     }
 
     public boolean deleteUser(Long id) {
-        return userJdbcDAO.deleteUser(id);
+        User user = userJdbcDAO.getUserById(id);
+        if(user != null && userJdbcDAO.checkingUser(user.getName(),user.getPassword())) {
+             userJdbcDAO.deleteUser(id);
+             return true;
+        }
+        return false;
     }
 
-    public boolean createTable() {
-        return userJdbcDAO.createTable();
+    public void createTable() {
+         userJdbcDAO.createTable();
     }
 }
