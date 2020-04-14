@@ -39,6 +39,7 @@ public class UpdateUserServlet extends HttpServlet {
                     && userService.updateUser(oldName, oldPassword, oldAge, newName, newPassword, newAge)) {
                 resp.getWriter().println("The user was successfully changed=)");
                 resp.setStatus(HttpStatus.OK_200);
+                req.setAttribute("users", userService.getAllUsers());
                 req.getRequestDispatcher("index.jsp").forward(req, resp);
             } else {
                 resp.getWriter().println("Error changing the user=(");

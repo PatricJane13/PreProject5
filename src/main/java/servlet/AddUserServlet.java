@@ -17,6 +17,7 @@ public class AddUserServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setAttribute("users", userService.getAllUsers());
         req.getRequestDispatcher("index.jsp").forward(req, resp);
     }
 
@@ -29,6 +30,7 @@ public class AddUserServlet extends HttpServlet {
             if (name.trim().length() != 0 && password.trim().length() != 0 && req.getParameter("age").trim().length() != 0 && userService.addUser(new User(name, password, age))) {
                 resp.getWriter().println("You have successfully registered=)");
                 resp.setStatus(HttpStatus.OK_200);
+                req.setAttribute("users", userService.getAllUsers());
                 req.getRequestDispatcher("index.jsp").forward(req, resp);
             } else {
                 resp.getWriter().println("Failed to register=(");
