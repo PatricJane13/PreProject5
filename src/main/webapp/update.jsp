@@ -6,6 +6,8 @@
 
 <body>
 <form action="/update" method="post" ${requestScope.user}>
+    User ID:<br>
+    ${requestScope.user.id}<br><br>
     OldLogin:<br>
     <input value="${requestScope.user.name}" type="text" name="oldName"><br><br>
     OldPassword:<br>
@@ -18,7 +20,7 @@
     <input type="text" name="newPassword"><br><br>
     NewAge:<br>
     <input type="number" name="newAge"><br>
-    <button>Let's go update...</button>
+    <button name="id" value="${requestScope.user.id}" formmethod="post">Let's go update...</button>
 </form>
 </body>
 </html>

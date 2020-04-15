@@ -57,8 +57,6 @@ public class DBHelper {
 
     public static Connection getMySqlConnectionJDBC() {
         try {
-            DriverManager.registerDriver((Driver) Class.forName("com.mysql.jdbc.Driver").newInstance());
-
             StringBuilder url = new StringBuilder();
 
             url.
@@ -69,9 +67,9 @@ public class DBHelper {
                     append("user=root&").           //login
                     append("password=root1");       //password
 
-            Connection connection = DriverManager.getConnection(url.toString());
-            return connection;
-        } catch (SQLException | InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+            DriverManager.registerDriver(DriverManager.getDriver(url.toString()));
+            return DriverManager.getConnection(url.toString());
+        } catch (SQLException e) {
             e.printStackTrace();
             throw new IllegalStateException();
         }

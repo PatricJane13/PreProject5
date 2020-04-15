@@ -13,7 +13,7 @@ public interface UserDAO {
 
     List<User> getAllUsers();
 
-    void updateUser(String oldName, String oldPassword, Long oldAge, String newName, String newPassword, Long newAge);
+    void updateUser(User oldUser, User newUser);
 
     void deleteUser(Long id);
 

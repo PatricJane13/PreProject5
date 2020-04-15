@@ -13,7 +13,7 @@ import java.io.IOException;
 
 @WebServlet("/update")
 public class UpdateUserServlet extends HttpServlet {
-    UserService userService = new UserService();
+    UserService userService = UserService.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -25,17 +25,16 @@ public class UpdateUserServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-            String oldName = req.getParameter("oldName");
-            String oldPassword = req.getParameter("oldPassword");
-            Long oldAge = Long.parseLong(req.getParameter("oldAge"));
-            String newName = req.getParameter("newName");
-            String newPassword = req.getParameter("newPassword");
-            Long newAge = Long.parseLong(req.getParameter("newAge"));
-            if (newPassword.trim().length() != 0 && newName.trim().length() != 0
-                    && oldPassword.trim().length() != 0
-                    && oldName.trim().length() != 0
-                    && userService.updateUser(oldName, oldPassword, oldAge, newName, newPassword, newAge)) {
-                resp.getWriter().println("The user was successfully changed=)");
+            User user = userService.getUserById(Long.parseLong(req.getParameter("id")));
+            User user1 = new User(req.getParameter("newName"), req.getParameter("newPassword"), Long.parseLong(req.getParameter("newAge")));
+
+            if (user != null
+                    && user1.getPassword().trim().length() != 0
+                    && user1.getName().trim().length() != 0
+                    && user.getPassword().trim().length() != 0
+                    && user.getName().trim().length() != 0
+                    && userService.updateUser(user, user1)) {
+
                 resp.setStatus(HttpStatus.OK_200);
                 req.setAttribute("users", userService.getAllUsers());
                 req.getRequestDispatcher("index.jsp").forward(req, resp);

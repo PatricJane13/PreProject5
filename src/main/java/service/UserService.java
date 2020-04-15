@@ -1,53 +1,61 @@
 package service;
 
-import DAO.UserHibernateDAO;
+import DAO.UserDAO;
+import DAO.UserDaoFactory;
 import model.User;
 
 import java.util.List;
 
 public class UserService {
-    //private UserJdbcDAO userJdbcDAO = new UserJdbcDAO();
-    UserHibernateDAO userHibernateDAO = new UserHibernateDAO();
+    private static UserService userService;
+    private UserDAO userDAO = UserDaoFactory.create();
 
-    public UserService() {
+    public static UserService getInstance() {
+        if (userService == null) {
+            userService = new UserService();
+        }
+        return userService;
+    }
+
+    private UserService() {
 
     }
 
     public boolean addUser(User user) {
-        User user1 = userHibernateDAO.getUserByName(user.getName());
+        User user1 = userDAO.getUserByName(user.getName());
         if (user1 == null) {
-            userHibernateDAO.addUser(user);
+            userDAO.addUser(user);
             return true;
         }
         return false;
     }
 
     public List<User> getAllUsers() {
-        return userHibernateDAO.getAllUsers();
+        return userDAO.getAllUsers();
     }
 
     public User getUserById(Long id) {
-        return userHibernateDAO.getUserById(id);
+        return userDAO.getUserById(id);
     }
 
-    public boolean updateUser(String oldName, String oldPassword, Long oldAge, String newName, String newPassword, Long newAge) {
-        if (!userHibernateDAO.checkingUser(newName, newPassword) && userHibernateDAO.checkingUser(oldName, oldPassword)) {
-            userHibernateDAO.updateUser(oldName, oldPassword, oldAge, newName, newPassword, newAge);
+    public boolean updateUser(User oldUser, User newUser) {
+        if (!userDAO.checkingUser(newUser.getName(), newUser.getPassword())) {
+            userDAO.updateUser(oldUser, newUser);
             return true;
         }
         return false;
     }
 
     public boolean deleteUser(Long id) {
-        User user = userHibernateDAO.getUserById(id);
-        if (user != null && userHibernateDAO.checkingUser(user.getName(), user.getPassword())) {
-            userHibernateDAO.deleteUser(id);
+        User user = userDAO.getUserById(id);
+        if (user != null && userDAO.checkingUser(user.getName(), user.getPassword())) {
+            userDAO.deleteUser(id);
             return true;
         }
         return false;
     }
 
     public void createTable() {
-        userHibernateDAO.createTable();
+        userDAO.createTable();
     }
 }

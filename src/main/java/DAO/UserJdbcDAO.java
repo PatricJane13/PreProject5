@@ -65,14 +65,14 @@ public class UserJdbcDAO implements UserDAO {
         return null;
     }
 
-    public void updateUser(String oldName, String oldPassword, Long oldAge, String newName, String newPassword, Long newAge) {
+    public void updateUser(User oldUser, User newUser) {
         try (PreparedStatement preparedStatement = DBHelper.getMySqlConnectionJDBC().prepareStatement("UPDATE register_table SET NAME = ?, password =?, age=? WHERE NAME =? AND password =? AND age =?")) {
-            preparedStatement.setString(1, newName);
-            preparedStatement.setString(2, newPassword);
-            preparedStatement.setLong(3, newAge);
-            preparedStatement.setString(4, oldName);
-            preparedStatement.setString(5, oldPassword);
-            preparedStatement.setLong(6, oldAge);
+            preparedStatement.setString(1, newUser.getName());
+            preparedStatement.setString(2, newUser.getPassword());
+            preparedStatement.setLong(3, newUser.getAge());
+            preparedStatement.setString(4, oldUser.getName());
+            preparedStatement.setString(5, oldUser.getPassword());
+            preparedStatement.setLong(6, oldUser.getAge());
             preparedStatement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
