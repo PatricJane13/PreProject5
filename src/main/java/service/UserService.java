@@ -33,16 +33,16 @@ public class UserService {
     public boolean updateUser(String oldName, String oldPassword, Long oldAge, String newName, String newPassword, Long newAge) {
         if (!userHibernateDAO.checkingUser(newName, newPassword) && userHibernateDAO.checkingUser(oldName, oldPassword)) {
             userHibernateDAO.updateUser(oldName, oldPassword, oldAge, newName, newPassword, newAge);
-             return true;
+            return true;
         }
         return false;
     }
 
     public boolean deleteUser(Long id) {
         User user = userHibernateDAO.getUserById(id);
-        if(user != null && userHibernateDAO.checkingUser(user.getName(),user.getPassword())) {
+        if (user != null && userHibernateDAO.checkingUser(user.getName(), user.getPassword())) {
             userHibernateDAO.deleteUser(id);
-             return true;
+            return true;
         }
         return false;
     }

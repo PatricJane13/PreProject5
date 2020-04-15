@@ -13,7 +13,7 @@ import java.sql.SQLException;
 
 public class DBHelper {
     private static DBHelper dbHelper;
-    private  SessionFactory sessionFactory;
+    private SessionFactory sessionFactory;
 
     public static DBHelper dbHelper() {
         if (dbHelper == null) {
@@ -25,8 +25,8 @@ public class DBHelper {
     private DBHelper() {
     }
 
-    public SessionFactory getSessionFactory(){
-        if (sessionFactory == null){
+    public SessionFactory getSessionFactory() {
+        if (sessionFactory == null) {
             sessionFactory = createSessionFactory();
         }
         return sessionFactory;

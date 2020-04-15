@@ -7,7 +7,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserJdbcDAO implements UserDAO{
+public class UserJdbcDAO implements UserDAO {
 
     public UserJdbcDAO() {
     }
@@ -67,13 +67,13 @@ public class UserJdbcDAO implements UserDAO{
 
     public void updateUser(String oldName, String oldPassword, Long oldAge, String newName, String newPassword, Long newAge) {
         try (PreparedStatement preparedStatement = DBHelper.getMySqlConnectionJDBC().prepareStatement("UPDATE register_table SET NAME = ?, password =?, age=? WHERE NAME =? AND password =? AND age =?")) {
-                preparedStatement.setString(1, newName);
-                preparedStatement.setString(2, newPassword);
-                preparedStatement.setLong(3, newAge);
-                preparedStatement.setString(4, oldName);
-                preparedStatement.setString(5, oldPassword);
-                preparedStatement.setLong(6, oldAge);
-                preparedStatement.execute();
+            preparedStatement.setString(1, newName);
+            preparedStatement.setString(2, newPassword);
+            preparedStatement.setLong(3, newAge);
+            preparedStatement.setString(4, oldName);
+            preparedStatement.setString(5, oldPassword);
+            preparedStatement.setLong(6, oldAge);
+            preparedStatement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
         }
