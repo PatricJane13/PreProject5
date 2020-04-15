@@ -1,52 +1,53 @@
 package service;
 
-import DAO.UserJdbcDAO;
+import DAO.UserHibernateDAO;
 import model.User;
 
 import java.util.List;
 
 public class UserService {
-    private UserJdbcDAO userJdbcDAO = new UserJdbcDAO();
+    //private UserJdbcDAO userJdbcDAO = new UserJdbcDAO();
+    UserHibernateDAO userHibernateDAO = new UserHibernateDAO();
 
     public UserService() {
 
     }
 
     public boolean addUser(User user) {
-        User user1 = userJdbcDAO.getUserByName(user.getName());
+        User user1 = userHibernateDAO.getUserByName(user.getName());
         if (user1 == null) {
-            userJdbcDAO.addUser(user);
+            userHibernateDAO.addUser(user);
             return true;
         }
         return false;
     }
 
     public List<User> getAllUsers() {
-        return userJdbcDAO.getAllUsers();
+        return userHibernateDAO.getAllUsers();
     }
 
     public User getUserById(Long id) {
-        return userJdbcDAO.getUserById(id);
+        return userHibernateDAO.getUserById(id);
     }
 
     public boolean updateUser(String oldName, String oldPassword, Long oldAge, String newName, String newPassword, Long newAge) {
-        if (!userJdbcDAO.checkingUser(newName, newPassword) && userJdbcDAO.checkingUser(oldName, oldPassword)) {
-             userJdbcDAO.updateUser(oldName, oldPassword, oldAge, newName, newPassword, newAge);
+        if (!userHibernateDAO.checkingUser(newName, newPassword) && userHibernateDAO.checkingUser(oldName, oldPassword)) {
+            userHibernateDAO.updateUser(oldName, oldPassword, oldAge, newName, newPassword, newAge);
              return true;
         }
         return false;
     }
 
     public boolean deleteUser(Long id) {
-        User user = userJdbcDAO.getUserById(id);
-        if(user != null && userJdbcDAO.checkingUser(user.getName(),user.getPassword())) {
-             userJdbcDAO.deleteUser(id);
+        User user = userHibernateDAO.getUserById(id);
+        if(user != null && userHibernateDAO.checkingUser(user.getName(),user.getPassword())) {
+            userHibernateDAO.deleteUser(id);
              return true;
         }
         return false;
     }
 
     public void createTable() {
-         userJdbcDAO.createTable();
+        userHibernateDAO.createTable();
     }
 }
