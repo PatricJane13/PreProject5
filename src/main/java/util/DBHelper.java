@@ -13,7 +13,7 @@ import java.sql.SQLException;
 
 public class DBHelper {
     private static DBHelper dbHelper;
-    private SessionFactory sessionFactory;
+    private static SessionFactory sessionFactory;
 
     public static DBHelper dbHelper() {
         if (dbHelper == null) {
@@ -25,14 +25,14 @@ public class DBHelper {
     private DBHelper() {
     }
 
-    public SessionFactory getSessionFactory() {
+    public static SessionFactory getSessionFactory() {
         if (sessionFactory == null) {
             sessionFactory = createSessionFactory();
         }
         return sessionFactory;
     }
 
-    private static Configuration getMySqlConfiguration() {
+    public static Configuration getMySqlConfiguration() {
         Configuration configuration = new Configuration();
         configuration.addAnnotatedClass(User.class);
 

@@ -5,12 +5,14 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import util.DBHelper;
 
 import java.util.List;
 
 public class UserHibernateDAO implements UserDAO {
-    private SessionFactory sessionFactory = DBHelper.dbHelper().getSessionFactory();
+    private SessionFactory sessionFactory = UserDaoFactory.create();
+
+    public UserHibernateDAO() {
+    }
 
     @Override
     public User getUserByName(String name) {
