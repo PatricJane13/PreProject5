@@ -2,6 +2,7 @@ package DAO;
 
 import model.User;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public interface UserDAO {
@@ -9,13 +10,13 @@ public interface UserDAO {
 
     User getUserById(Long id);
 
-    void addUser(User user);
+    void addUser(User user) throws SQLException;
 
     List<User> getAllUsers();
 
-    void updateUser(User oldUser, User newUser);
+    void updateUser(User newUser) throws SQLException;
 
-    void deleteUser(Long id);
+    void deleteUser(Long id) throws SQLException;
 
     boolean checkingUser(String name, String password);
 

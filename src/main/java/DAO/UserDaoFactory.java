@@ -1,13 +1,9 @@
 package DAO;
 
-import org.hibernate.SessionFactory;
 import util.DBHelper;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
 import java.util.Properties;
 
 public class UserDaoFactory {
@@ -24,7 +20,7 @@ public class UserDaoFactory {
                     return new UserHibernateDAO();
                 }
                 case "jdbc":
-                    return new UserJdbcDAO();
+                    return new UserJdbcDAO(DBHelper.getMySqlConnectionJDBC());
             }
         } catch (IOException e) {
             e.printStackTrace();

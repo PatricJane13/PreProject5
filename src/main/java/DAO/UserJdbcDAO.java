@@ -8,17 +8,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserJdbcDAO implements UserDAO {
+    private Connection connection;
 
-    public UserJdbcDAO() {
+    public UserJdbcDAO(Connection connection) {
+        this.connection = connection;
     }
 
     public User getUserByName(String name) {
-        try (PreparedStatement preparedStatement = DBHelper.getMySqlConnectionJDBC().prepareStatement("SELECT * FROM register_table WHERE NAME=?")) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM register_table WHERE NAME=?")) {
+            connection.setAutoCommit(false);
             preparedStatement.setString(1, name);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 return new User(resultSet.getLong("id"), resultSet.getString("name"), resultSet.getString("password"), resultSet.getLong("age"));
-
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -27,12 +29,11 @@ public class UserJdbcDAO implements UserDAO {
     }
 
     public User getUserById(Long id) {
-        try (PreparedStatement preparedStatement = DBHelper.getMySqlConnectionJDBC().prepareStatement("SELECT * FROM register_table WHERE id=?")) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM register_table WHERE id=?")) {
             preparedStatement.setLong(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 return new User(resultSet.getLong("id"), resultSet.getString("name"), resultSet.getString("password"), resultSet.getLong("age"));
-
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -40,19 +41,24 @@ public class UserJdbcDAO implements UserDAO {
         return null;
     }
 
-    public void addUser(User user) {
-        try (PreparedStatement preparedStatement = DBHelper.getMySqlConnectionJDBC().prepareStatement("INSERT INTO register_table (NAME, password, age) VALUES (?,?,?)")) {
+    public void addUser(User user) throws SQLException {
+        connection.setAutoCommit(false);
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO register_table (NAME, password, age) VALUES (?,?,?)");
             preparedStatement.setString(1, user.getName());
             preparedStatement.setString(2, user.getPassword());
             preparedStatement.setLong(3, user.getAge());
             preparedStatement.execute();
+            connection.commit();
+            connection.setAutoCommit(true);
         } catch (SQLException e) {
             e.printStackTrace();
+            connection.rollback();
         }
     }
 
     public List<User> getAllUsers() {
-        try (Statement statement = DBHelper.getMySqlConnectionJDBC().createStatement()) {
+        try (Statement statement = connection.createStatement()) {
             List<User> usersList = new ArrayList<>();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM register_table");
             while (resultSet.next()) {
@@ -65,35 +71,43 @@ public class UserJdbcDAO implements UserDAO {
         return null;
     }
 
-    public void updateUser(User oldUser, User newUser) {
-        try (PreparedStatement preparedStatement = DBHelper.getMySqlConnectionJDBC().prepareStatement("UPDATE register_table SET NAME = ?, password =?, age=? WHERE NAME =? AND password =? AND age =?")) {
+    public void updateUser(User newUser) throws SQLException {
+        try  {
+            connection.setAutoCommit(false);
+            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE register_table SET NAME = ?, password =?, age=? WHERE ID =?");
             preparedStatement.setString(1, newUser.getName());
             preparedStatement.setString(2, newUser.getPassword());
             preparedStatement.setLong(3, newUser.getAge());
-            preparedStatement.setString(4, oldUser.getName());
-            preparedStatement.setString(5, oldUser.getPassword());
-            preparedStatement.setLong(6, oldUser.getAge());
+            preparedStatement.setLong(4, newUser.getId());
             preparedStatement.execute();
+            connection.commit();
+            connection.setAutoCommit(true);
         } catch (SQLException e) {
             e.printStackTrace();
+            connection.rollback();
         }
     }
 
-    public void deleteUser(Long id) {
-        try (PreparedStatement preparedStatement = DBHelper.getMySqlConnectionJDBC().prepareStatement("DELETE FROM register_table WHERE NAME =? AND password=?")) {
+    public void deleteUser(Long id) throws SQLException {
+        try {
+            connection.setAutoCommit(false);
+            PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM register_table WHERE NAME =? AND password=?");
             User user = getUserById(id);
             if (user != null) {
                 preparedStatement.setString(1, user.getName());
                 preparedStatement.setString(2, user.getPassword());
                 preparedStatement.execute();
             }
+            connection.commit();
+            connection.setAutoCommit(true);
         } catch (SQLException e) {
             e.printStackTrace();
+            connection.rollback();
         }
     }
 
     public boolean checkingUser(String name, String password) {
-        try (PreparedStatement preparedStatement = DBHelper.getMySqlConnectionJDBC().prepareStatement("SELECT * FROM register_table WHERE NAME =? AND password=?")) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM register_table WHERE NAME =? AND password=?")) {
             preparedStatement.setString(1, name);
             preparedStatement.setString(2, password);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -107,7 +121,7 @@ public class UserJdbcDAO implements UserDAO {
     }
 
     public void createTable() {
-        try (Statement statement = DBHelper.getMySqlConnectionJDBC().createStatement()) {
+        try (Statement statement = connection.createStatement()) {
             statement.execute("create table if not exists register_table\n" +
                     "(\n" +
                     "    id       bigint       not null auto_increment,\n" +

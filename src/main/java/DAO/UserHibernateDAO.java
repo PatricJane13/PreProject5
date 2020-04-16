@@ -74,17 +74,15 @@ public class UserHibernateDAO implements UserDAO {
     }
 
     @Override
-    public void updateUser(User oldUser, User newUser) {
+    public void updateUser(User newUser) {
         try {
             Session session = sessionFactory.openSession();
             Transaction transaction = session.beginTransaction();
-            Query query = session.createQuery("UPDATE User SET name= :newName, password = :newPassword, age = :newAge WHERE name = :oldName AND password = :oldPassword AND age = :oldAge");
+            Query query = session.createQuery("UPDATE User SET name= :newName, password = :newPassword, age = :newAge WHERE id = :id");
             query.setParameter("newName", newUser.getName());
             query.setParameter("newPassword", newUser.getPassword());
             query.setParameter("newAge", newUser.getAge());
-            query.setParameter("oldName", oldUser.getName());
-            query.setParameter("oldPassword", oldUser.getPassword());
-            query.setParameter("oldAge", oldUser.getAge());
+            query.setParameter("id", newUser.getId());
             query.executeUpdate();
             transaction.commit();
             session.close();

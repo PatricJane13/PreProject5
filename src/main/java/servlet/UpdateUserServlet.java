@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 
 @WebServlet("/update")
 public class UpdateUserServlet extends HttpServlet {
@@ -25,24 +26,22 @@ public class UpdateUserServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-            User user = userService.getUserById(Long.parseLong(req.getParameter("id")));
-            User user1 = new User(req.getParameter("newName"), req.getParameter("newPassword"), Long.parseLong(req.getParameter("newAge")));
-
-            if (user != null
-                    && user1.getPassword().trim().length() != 0
-                    && user1.getName().trim().length() != 0
-                    && user.getPassword().trim().length() != 0
+            User user = new User(Long.parseLong(req.getParameter("id")),
+                    req.getParameter("newName"),
+                    req.getParameter("newPassword"),
+                    Long.parseLong(req.getParameter("newAge")));
+            if (user.getPassword().trim().length() != 0
                     && user.getName().trim().length() != 0
-                    && userService.updateUser(user, user1)) {
+                    && userService.updateUser(user)) {
 
                 resp.setStatus(HttpStatus.OK_200);
                 req.setAttribute("users", userService.getAllUsers());
-                req.getRequestDispatcher("index.jsp").forward(req, resp);
+                resp.sendRedirect("/all");
             } else {
                 resp.getWriter().println("Error changing the user=(");
                 resp.setStatus(HttpStatus.BAD_REQUEST_400);
             }
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException | SQLException e) {
             resp.getWriter().println("Error changing the user=(");
             resp.setStatus(HttpStatus.BAD_REQUEST_400);
             e.printStackTrace();

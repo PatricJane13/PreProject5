@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 
 @WebServlet("/delete")
 public class DeleteUserServlet extends HttpServlet {
@@ -22,12 +23,12 @@ public class DeleteUserServlet extends HttpServlet {
                 resp.getWriter().println("The user was successfully deleted=)");
                 resp.setStatus(HttpStatus.OK_200);
                 req.setAttribute("users", userService.getAllUsers());
-                req.getRequestDispatcher("index.jsp").forward(req, resp);
+                resp.sendRedirect("/all");
             } else {
                 resp.getWriter().println("Error deleting a user=(");
                 resp.setStatus(HttpStatus.BAD_REQUEST_400);
             }
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException | SQLException e) {
             e.printStackTrace();
         }
     }

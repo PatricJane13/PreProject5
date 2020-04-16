@@ -4,6 +4,7 @@ import DAO.UserDAO;
 import DAO.UserDaoFactory;
 import model.User;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public class UserService {
@@ -21,7 +22,7 @@ public class UserService {
 
     }
 
-    public boolean addUser(User user) {
+    public boolean addUser(User user) throws SQLException {
         User user1 = userDAO.getUserByName(user.getName());
         if (user1 == null) {
             userDAO.addUser(user);
@@ -38,15 +39,15 @@ public class UserService {
         return userDAO.getUserById(id);
     }
 
-    public boolean updateUser(User oldUser, User newUser) {
+    public boolean updateUser(User newUser) throws SQLException {
         if (!userDAO.checkingUser(newUser.getName(), newUser.getPassword())) {
-            userDAO.updateUser(oldUser, newUser);
+            userDAO.updateUser(newUser);
             return true;
         }
         return false;
     }
 
-    public boolean deleteUser(Long id) {
+    public boolean deleteUser(Long id) throws SQLException {
         User user = userDAO.getUserById(id);
         if (user != null && userDAO.checkingUser(user.getName(), user.getPassword())) {
             userDAO.deleteUser(id);

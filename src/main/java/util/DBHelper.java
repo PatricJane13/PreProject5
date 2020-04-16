@@ -68,7 +68,8 @@ public class DBHelper {
                     append("password=root1");       //password
 
             DriverManager.registerDriver(DriverManager.getDriver(url.toString()));
-            return DriverManager.getConnection(url.toString());
+            Connection connection = DriverManager.getConnection(url.toString());
+            return connection;
         } catch (SQLException e) {
             e.printStackTrace();
             throw new IllegalStateException();
