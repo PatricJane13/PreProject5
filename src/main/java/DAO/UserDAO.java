@@ -19,6 +19,4 @@ public interface UserDAO {
     void deleteUser(Long id) throws SQLException;
 
     boolean checkingUser(String name, String password);
-
-    void createTable();
 }

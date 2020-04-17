@@ -1,7 +1,6 @@
 package DAO;
 
 import model.User;
-import util.DBHelper;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -14,9 +13,9 @@ public class UserJdbcDAO implements UserDAO {
         this.connection = connection;
     }
 
+    @Override
     public User getUserByName(String name) {
         try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM register_table WHERE NAME=?")) {
-            connection.setAutoCommit(false);
             preparedStatement.setString(1, name);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
@@ -28,6 +27,7 @@ public class UserJdbcDAO implements UserDAO {
         return null;
     }
 
+    @Override
     public User getUserById(Long id) {
         try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM register_table WHERE id=?")) {
             preparedStatement.setLong(1, id);
@@ -41,22 +41,24 @@ public class UserJdbcDAO implements UserDAO {
         return null;
     }
 
+    @Override
     public void addUser(User user) throws SQLException {
-        connection.setAutoCommit(false);
         try {
+            connection.setAutoCommit(false);
             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO register_table (NAME, password, age) VALUES (?,?,?)");
             preparedStatement.setString(1, user.getName());
             preparedStatement.setString(2, user.getPassword());
             preparedStatement.setLong(3, user.getAge());
             preparedStatement.execute();
             connection.commit();
-            connection.setAutoCommit(true);
         } catch (SQLException e) {
             e.printStackTrace();
             connection.rollback();
         }
+        connection.setAutoCommit(true);
     }
 
+    @Override
     public List<User> getAllUsers() {
         try (Statement statement = connection.createStatement()) {
             List<User> usersList = new ArrayList<>();
@@ -71,8 +73,9 @@ public class UserJdbcDAO implements UserDAO {
         return null;
     }
 
+    @Override
     public void updateUser(User newUser) throws SQLException {
-        try  {
+        try {
             connection.setAutoCommit(false);
             PreparedStatement preparedStatement = connection.prepareStatement("UPDATE register_table SET NAME = ?, password =?, age=? WHERE ID =?");
             preparedStatement.setString(1, newUser.getName());
@@ -81,31 +84,29 @@ public class UserJdbcDAO implements UserDAO {
             preparedStatement.setLong(4, newUser.getId());
             preparedStatement.execute();
             connection.commit();
-            connection.setAutoCommit(true);
         } catch (SQLException e) {
             e.printStackTrace();
             connection.rollback();
         }
+        connection.setAutoCommit(true);
     }
 
+    @Override
     public void deleteUser(Long id) throws SQLException {
         try {
             connection.setAutoCommit(false);
-            PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM register_table WHERE NAME =? AND password=?");
-            User user = getUserById(id);
-            if (user != null) {
-                preparedStatement.setString(1, user.getName());
-                preparedStatement.setString(2, user.getPassword());
-                preparedStatement.execute();
-            }
+            PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM register_table WHERE id=?");
+            preparedStatement.setLong(1, id);
+            preparedStatement.execute();
             connection.commit();
-            connection.setAutoCommit(true);
         } catch (SQLException e) {
             e.printStackTrace();
             connection.rollback();
         }
+        connection.setAutoCommit(true);
     }
 
+    @Override
     public boolean checkingUser(String name, String password) {
         try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM register_table WHERE NAME =? AND password=?")) {
             preparedStatement.setString(1, name);

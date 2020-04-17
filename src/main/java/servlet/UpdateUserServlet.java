@@ -35,14 +35,13 @@ public class UpdateUserServlet extends HttpServlet {
                     && userService.updateUser(user)) {
 
                 resp.setStatus(HttpStatus.OK_200);
-                req.setAttribute("users", userService.getAllUsers());
                 resp.sendRedirect("/all");
             } else {
                 resp.getWriter().println("Error changing the user=(");
                 resp.setStatus(HttpStatus.BAD_REQUEST_400);
             }
         } catch (NumberFormatException | SQLException e) {
-            resp.getWriter().println("Error changing the user=(");
+            resp.getWriter().println("Error changing the user =(");
             resp.setStatus(HttpStatus.BAD_REQUEST_400);
             e.printStackTrace();
         }

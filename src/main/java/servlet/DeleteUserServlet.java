@@ -22,7 +22,6 @@ public class DeleteUserServlet extends HttpServlet {
             if (userService.deleteUser(id)) {
                 resp.getWriter().println("The user was successfully deleted=)");
                 resp.setStatus(HttpStatus.OK_200);
-                req.setAttribute("users", userService.getAllUsers());
                 resp.sendRedirect("/all");
             } else {
                 resp.getWriter().println("Error deleting a user=(");

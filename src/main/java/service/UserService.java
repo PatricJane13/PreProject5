@@ -55,8 +55,4 @@ public class UserService {
         }
         return false;
     }
-
-    public void createTable() {
-        userDAO.createTable();
-    }
 }
