@@ -11,20 +11,29 @@
         <c:out value="${user.password}"/>
         <c:out value="${user.age}"/><br>
         <form method="post">
-            <button name="id" value="${user.id}" formaction="/delete">Delete</button>
+            <button name="id" value="${user.id}" formaction="/admin/delete">Delete</button>
         </form>
         <form method="get">
-            <button name="id" value="${user.id}" formaction="/update">Update</button>
+            <button name="id" value="${user.id}" formaction="/admin/update">Update</button>
         </form>
     </c:forEach>
 </div>
 <form action="/add" method="post">
+    Role:<br>
+    <input type="text" name="role"><br><br>
     Name:<br>
     <input type="text" name="name"><br><br>
     Password:<br>
     <input type="text" name="password"><br><br>
     Age:<br>
     <input type="number" name="age"><br>
+    <button>Let's go...</button>
+</form>
+<form action="/login" method="post">
+    Name:<br>
+    <input type="text" name="name"><br><br>
+    Password:<br>
+    <input type="text" name="password"><br><br>
     <button>Let's go...</button>
 </form>
 </body>

@@ -5,7 +5,7 @@
 </head>
 
 <body>
-<form action="/update" method="post" ${requestScope.user}>
+<form action="/admin/update" method="post" ${requestScope.user}>
     <input type="hidden" value="${requestScope.user.id}" name="id">
     NewLogin:<br>
     <input type="text" name="newName"><br><br>

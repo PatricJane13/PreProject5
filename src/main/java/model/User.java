@@ -10,6 +10,9 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    @Column(name = "role")
+    private String role;
+
     @Column(name = "name")
     private String name;
 
@@ -19,6 +22,14 @@ public class User {
     @Column(name = "age")
     private long age;
 
+    public User(long id, String name, String password, long age, String role) {
+        this.id = id;
+        this.name = name;
+        this.password = password;
+        this.age = age;
+        this.role = role;
+    }
+
     public User(long id, String name, String password, long age) {
         this.id = id;
         this.name = name;
@@ -26,10 +37,11 @@ public class User {
         this.age = age;
     }
 
-    public User(String name, String password, long age) {
+    public User(String name, String password, long age, String role) {
         this.name = name;
         this.password = password;
         this.age = age;
+        this.role = role;
     }
 
     public User(String name, String password) {
@@ -71,5 +83,13 @@ public class User {
 
     public void setAge(long age) {
         this.age = age;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

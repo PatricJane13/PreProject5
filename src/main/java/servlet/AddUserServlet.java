@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -18,23 +19,24 @@ public class AddUserServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.sendRedirect("/all");
+        req.getRequestDispatcher("/index.jsp").forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession httpSession = req.getSession();
         try {
             String name = req.getParameter("name");
             String password = req.getParameter("password");
             long age = Long.parseLong(req.getParameter("age"));
+            User user = new User(name, password, age, req.getParameter("role"));
             if (name.trim().length() != 0 && password.trim().length() != 0
-                    && req.getParameter("age").trim().length() != 0
-                    && userService.addUser(new User(name, password, age))) {
-                resp.getWriter().println("You have successfully registered=)");
+                    && req.getParameter("age").trim().length() != 0) {
+                userService.addUser(user);
                 resp.setStatus(HttpStatus.OK_200);
-                resp.sendRedirect("/all");
+                resp.sendRedirect("/admin/all");
             } else {
-                resp.getWriter().println("Failed to register=(");
+                resp.getWriter().println("Failed to register =(");
                 resp.setStatus(HttpStatus.BAD_REQUEST_400);
             }
         } catch (NumberFormatException | SQLException e) {

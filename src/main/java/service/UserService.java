@@ -23,8 +23,7 @@ public class UserService {
     }
 
     public boolean addUser(User user) throws SQLException {
-        User user1 = userDAO.getUserByName(user.getName());
-        if (user1 == null) {
+        if (!userDAO.checkingUser(user.getName(), user.getPassword())) {
             userDAO.addUser(user);
             return true;
         }
@@ -54,5 +53,12 @@ public class UserService {
             return true;
         }
         return false;
+    }
+
+    public boolean checkingUser(String name, String password){
+        return userDAO.checkingUser(name, password);
+    }
+    public User getUserByName(String name){
+        return userDAO.getUserByName(name);
     }
 }

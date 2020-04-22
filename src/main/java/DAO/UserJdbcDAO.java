@@ -19,7 +19,7 @@ public class UserJdbcDAO implements UserDAO {
             preparedStatement.setString(1, name);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                return new User(resultSet.getLong("id"), resultSet.getString("name"), resultSet.getString("password"), resultSet.getLong("age"));
+                return new User(resultSet.getLong("id"), resultSet.getString("name"), resultSet.getString("password"), resultSet.getLong("age"),resultSet.getString("role"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -33,7 +33,7 @@ public class UserJdbcDAO implements UserDAO {
             preparedStatement.setLong(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                return new User(resultSet.getLong("id"), resultSet.getString("name"), resultSet.getString("password"), resultSet.getLong("age"));
+                return new User(resultSet.getLong("id"), resultSet.getString("name"), resultSet.getString("password"), resultSet.getLong("age"), resultSet.getString("role"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -45,10 +45,11 @@ public class UserJdbcDAO implements UserDAO {
     public void addUser(User user) throws SQLException {
         try {
             connection.setAutoCommit(false);
-            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO register_table (NAME, password, age) VALUES (?,?,?)");
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO register_table (NAME, password, age, role) VALUES (?,?,?,?)");
             preparedStatement.setString(1, user.getName());
             preparedStatement.setString(2, user.getPassword());
             preparedStatement.setLong(3, user.getAge());
+            preparedStatement.setString(4, user.getRole());
             preparedStatement.execute();
             connection.commit();
         } catch (SQLException e) {
@@ -64,7 +65,7 @@ public class UserJdbcDAO implements UserDAO {
             List<User> usersList = new ArrayList<>();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM register_table");
             while (resultSet.next()) {
-                usersList.add(new User(resultSet.getLong("id"), resultSet.getString("name"), resultSet.getString("password"), resultSet.getLong("age")));
+                usersList.add(new User(resultSet.getLong("id"), resultSet.getString("name"), resultSet.getString("password"), resultSet.getLong("age"), resultSet.getString("role")));
             }
             return usersList;
         } catch (SQLException e) {
