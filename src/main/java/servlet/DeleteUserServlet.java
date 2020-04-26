@@ -19,7 +19,6 @@ public class DeleteUserServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Long id = Long.parseLong(req.getParameter("id"));
-        HttpSession httpSession = req.getSession();
             try {
                 if (userService.deleteUser(id)) {
                     resp.setStatus(HttpStatus.OK_200);

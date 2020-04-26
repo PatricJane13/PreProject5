@@ -21,7 +21,7 @@ public class UserServlet  extends HttpServlet {
         String name = (String) httpSession.getAttribute("name");
 
         if (!(boolean) httpSession.getAttribute("access")){
-            getServletContext().getRequestDispatcher("/index.jsp").forward(req,resp);
+            getServletContext().getRequestDispatcher("/login.jsp").forward(req,resp);
         }
         User user = userService.getUserByName(name);
         req.setAttribute("user", user);

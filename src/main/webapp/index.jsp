@@ -29,12 +29,6 @@
     <input type="number" name="age"><br>
     <button>Let's go...</button>
 </form>
-<form action="/login" method="post">
-    Name:<br>
-    <input type="text" name="name"><br><br>
-    Password:<br>
-    <input type="text" name="password"><br><br>
-    <button>Let's go...</button>
-</form>
+
 </body>
 </html>

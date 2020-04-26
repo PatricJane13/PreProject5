@@ -16,6 +16,11 @@ public class LoginServlet extends HttpServlet {
     UserService userService = UserService.getInstance();
 
     @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        getServletContext().getRequestDispatcher("/login.jsp").forward(req,resp);
+    }
+
+    @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String name = req.getParameter("name");
         String password = req.getParameter("password");
@@ -26,15 +31,13 @@ public class LoginServlet extends HttpServlet {
             httpSession.setAttribute("password",password);
             if (user.getRole().equals("admin")){
                 httpSession.setAttribute("role", user.getRole());
-//                getServletContext().getRequestDispatcher("/admin/all").forward(req,resp);
                 resp.sendRedirect("/admin/all");
             }else if (user.getRole().equals("user")){
                 httpSession.setAttribute("role", user.getRole());
-//                getServletContext().getRequestDispatcher("/user").forward(req,resp);
                 resp.sendRedirect("/user");
             }
         }else {
-            getServletContext().getRequestDispatcher("/index.jsp").forward(req,resp);
+            getServletContext().getRequestDispatcher("/login.jsp").forward(req,resp);
         }
     }
 }
